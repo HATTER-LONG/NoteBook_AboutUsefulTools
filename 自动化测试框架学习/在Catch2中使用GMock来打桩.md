@@ -2,7 +2,7 @@
 
 参考 github 项目：[catch2-with-gmock](https://github.com/matepek/catch2-with-gmock)
 
-已 [TDD_Learning](https://github.com/HATTER-LONG/TDD_Learning/tree/master/test/Catch2/PlaceDescriptionServiceTestByGMock) 项目这部分代码为例：
+以 [TDD_Learning](https://github.com/HATTER-LONG/TDD_Learning/tree/master/test/Catch2/PlaceDescriptionServiceTestByGMock) 项目这部分代码为例：
 
 首先 main 函数中需要进行初始化工作：
 
