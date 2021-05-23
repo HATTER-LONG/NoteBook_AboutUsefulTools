@@ -1,5 +1,9 @@
 # Vim 常用命令
 
+## 终端真彩测试
+
+- printf "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n"
+
 ## Surround 命令
 
 - 新增环绕字符
