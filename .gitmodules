@@ -1,0 +1,15 @@
+[submodule "LinuxTerminalConfig/pure"]
+	path = LinuxTerminalConfig/pure
+	url = https://github.com/sindresorhus/pure
+[submodule "LinuxTerminalConfig/vim_runtime"]
+	path = LinuxTerminalConfig/vim_runtime
+	url = https://github.com/HATTER-LONG/vimrc.git
+[submodule "LinuxTerminalConfig/ohmyzsh"]
+	path = LinuxTerminalConfig/ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
+[submodule "LinuxTerminalConfig/ohmyzsh_plugins/zsh-autosuggestions"]
+	path = LinuxTerminalConfig/ohmyzsh_plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "LinuxTerminalConfig/ohmyzsh_plugins/zsh-syntax-highlighting"]
+	path = LinuxTerminalConfig/ohmyzsh_plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
