@@ -29,3 +29,5 @@ echo "安装 pure 主题 ..........."
 mkdir $PURE
 ln -s $CURRENT/pure $PURE
 
+
+echo "请注意安装依赖 npm nodejs 用于支持 cocnvim"
