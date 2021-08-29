@@ -37,3 +37,4 @@
     - [coc-json](https://github.com/neoclide/coc-json)。
     - [coc-cmake](https://github.com/voldikss/coc-cmake)。
 
+2. vim ack 插件依赖 ack 命令，需要安装。
