@@ -1,19 +1,34 @@
 #!/bin/sh
 
 # 更新子模块
-git submodule sync
-git submodule update --init --recursive
-git submodule update --remote --merge
+./upgrade.sh
 
 ZSH=~/.oh-my-zsh
 ZSHRC=~/.zshrc
 VIMRUNTIME=~/.vim_runtime
-PURE=~/.zsh
+PURE=~/.zsh/pure
 CURRENT=`pwd`
+time_now=$(date "+%Y%m%d")
+needback="false"
 
-echo $CURRENT
-echo $ZSH
+echo "清理已有环境 .........."
+function clean_target() {
+    if [ -d $1 ];then
+        echo "清理已安装的 $1 ......"
+        if [ $needback == "true" ];then
+            echo "back $1 --> ${1}_back_$[time_now]"
+            mv -f $1 ${1}_back_$[time_now]
+        else
+            rm -rf ${1}
+        fi
+    fi
+}
 
+
+clean_target $VIMRUNTIME
+clean_target $ZSH
+clean_target $ZSHRC
+clean_target $PURE
 echo "安装 vim config .........."
 ln -s $CURRENT/vim_runtime $VIMRUNTIME
 cd $VIMRUNTIME
@@ -26,8 +41,11 @@ ln -s $CURRENT/ohmyzsh $ZSH
 ln -s $CURRENT/zshrc $ZSHRC
 
 echo "安装 pure 主题 ..........."
-mkdir $PURE
+
+if [ ! -d ~/.zsh ];then
+    mkdir ~/.zsh
+fi
 ln -s $CURRENT/pure $PURE
 
 
-echo "请注意安装依赖 npm nodejs 用于支持 cocnvim"
+echo "请注意安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全局搜索"
