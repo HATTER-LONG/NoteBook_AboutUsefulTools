@@ -57,4 +57,10 @@ fi
 ln -s $CURRENT/pure $PURE
 
 
-echo "请注意安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全局搜索"
+echo "安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全局搜索..........."
+INSTALL="sudo pacman -Syyu"
+
+$INSTALL bat fzf nodejs npm ack
+
+
+echo "DONE !!! Enjoy :)"
