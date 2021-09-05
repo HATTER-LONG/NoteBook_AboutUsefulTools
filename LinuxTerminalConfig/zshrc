@@ -17,7 +17,7 @@ ZSH_THEME=""
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -39,7 +39,7 @@ ZSH_THEME=""
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -60,7 +60,7 @@ ZSH_THEME=""
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -104,9 +104,6 @@ zstyle ':prompt:pure:prompt:*' color cyan
 zstyle :prompt:pure:git:stash show yes
 prompt pure
 
-export CMAKE_GENERATOR=Ninja
-#export CPLUS_INCLUDE_PATH=/home/layton/Tools/usr/lib/clang/12.0.0/include:$CPLUS_INCLUDE_PATH
-export PATH=$PATH:$HOME/Tools/usr/bin
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -132,3 +129,7 @@ export PATH=$PATH:$HOME/Tools/usr/bin
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+source ~/.exports
+source ~/.aliases
+source ~/.functions
+
