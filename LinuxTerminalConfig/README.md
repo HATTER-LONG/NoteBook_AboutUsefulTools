@@ -2,7 +2,7 @@
 
 快速部署 Linux 终端工具：
 
-- 更新日期：2021/9/8
+- 更新日期：2021/9/9
 
 ## Install
 
@@ -35,5 +35,7 @@
      - [coc-rust-analyzer](https://github.com/fannheyward/coc-rust-analyzer)。
      - [coc-json](https://github.com/neoclide/coc-json)。
      - [coc-cmake](https://github.com/voldikss/coc-cmake)。
-
+     - [coc-sh](https://github.com/josa42/coc-sh)
+        - 依赖：`npm i -g bash-language-server`
+     - [coc-clang-format-style-options](https://www.npmjs.com/package/coc-clang-format-style-options)
 2. vim ack 插件依赖 ack 命令，需要安装。

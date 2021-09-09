@@ -33,7 +33,7 @@ clean_target $ZSHRC
 clean_target $PURE
 clean_target $EXPORTRC
 clean_target $ALIASESRC
-clean_target $FUNCTIONRC 
+clean_target $FUNCTIONRC
 
 echo "安装 vim config .........."
 ln -s $CURRENT/vim_runtime $VIMRUNTIME
@@ -45,7 +45,7 @@ echo "安装 oh my zsh ..........."
 ln -s $CURRENT/ohmyzsh_plugins/* $CURRENT/ohmyzsh/custom/plugins/
 ln -s $CURRENT/ohmyzsh $ZSH
 ln -s $CURRENT/zshrc $ZSHRC
-ln -s $CURRENT/function $FUNCTIONRC
+ln -s $CURRENT/functions $FUNCTIONRC
 ln -s $CURRENT/aliases $ALIASESRC
 ln -s $CURRENT/exports $EXPORTRC
 
