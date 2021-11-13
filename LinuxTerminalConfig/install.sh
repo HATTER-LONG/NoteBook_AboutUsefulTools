@@ -58,9 +58,9 @@ ln -s $CURRENT/pure $PURE
 
 
 echo "安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全局搜索..........."
-INSTALL="sudo pacman -Syyu"
-
-$INSTALL bat fzf nodejs npm ack
+#INSTALL="sudo pacman -Syyu"
+INSTALL="brew install"
+$INSTALL bat fzf  ack nodejs npm
 
 
 echo "DONE !!! Enjoy :)"

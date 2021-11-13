@@ -14,7 +14,8 @@ alias 4='cd -4'
 alias 5='cd -5'
 
 # Easy report
-alias ls='ls -Fh --color=auto --group-directories-first'
+alias ls='ls -Fh --color=auto' 
+# --group-directories-first
 alias grep='grep --color=auto'
 alias l='ls -l'
 alias la='ls -lA'
