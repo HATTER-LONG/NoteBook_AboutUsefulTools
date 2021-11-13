@@ -59,7 +59,7 @@ ln -s $CURRENT/pure $PURE
 
 echo "安装 tmux config ............."
 ln -s -f ./tmuxConfig/.tmux.conf ~/.tmux.conf
-cp ./tmuxConfig/.tmux.conf.local ~/.tmux.conf.local
+cp $CURRENT/tmuxConfig/.tmux.conf.local ~/.tmux.conf.local
 
 echo "安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全局搜索..........."
 #INSTALL="sudo pacman -Syyu"
