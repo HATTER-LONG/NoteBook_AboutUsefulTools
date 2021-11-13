@@ -13,3 +13,6 @@
 [submodule "LinuxTerminalConfig/ohmyzsh_plugins/zsh-syntax-highlighting"]
 	path = LinuxTerminalConfig/ohmyzsh_plugins/zsh-syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "LinuxTerminalConfig/tmuxConfig"]
+	path = LinuxTerminalConfig/tmuxConfig
+	url = https://github.com/gpakosz/.tmux.git
