@@ -64,7 +64,10 @@ cp $CURRENT/tmuxConfig/.tmux.conf.local ~/.tmux.conf.local
 echo "安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全局搜索..........."
 #INSTALL="sudo pacman -Syyu"
 INSTALL="brew install"
-$INSTALL bat fzf ack nodejs npm tmux
+$INSTALL bat fzf ack nodejs npm tmux exa ripgrep zoxide git fd yarn sqlite
 
+echo "suggest install font-fira-code-nerd-font!!!!"
 
-echo "DONE !!! Enjoy :)"
+echo "*********************"
+echo "* DONE !!! Enjoy :) *"
+echo "*********************"

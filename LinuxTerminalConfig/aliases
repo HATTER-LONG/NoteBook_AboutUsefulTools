@@ -14,10 +14,10 @@ alias 4='cd -4'
 alias 5='cd -5'
 
 # Easy report
-alias ls='ls -Fh --color=auto' 
+alias ls='exa -Fh --color=auto --icons ' 
 # --group-directories-first
 alias grep='grep --color=auto'
-alias l='ls -l'
+alias l='ls -l --long --header --git'
 alias la='ls -lA'
 alias lr='ls -R'
 alias lf='ls -l | grep "^-"'
@@ -62,3 +62,4 @@ alias g='git'
 alias python='python3'
 alias s='subl'
 alias v='nvim'
+alias tmux='TERM=screen-256color-bce tmux'
