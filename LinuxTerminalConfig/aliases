@@ -59,7 +59,8 @@ alias cz='echo > ~/.z'
 
 # Developer shortcuts
 alias g='git'
-alias python='python3'
+alias python='/usr/bin/python3'
+alias pip='/usr/bin/pip3'
 alias s='subl'
 alias v='nvim'
 alias tmux='TERM=screen-256color-bce tmux'

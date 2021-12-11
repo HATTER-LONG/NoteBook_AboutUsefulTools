@@ -16,3 +16,6 @@
 [submodule "LinuxTerminalConfig/tmuxConfig"]
 	path = LinuxTerminalConfig/tmuxConfig
 	url = https://github.com/gpakosz/.tmux.git
+[submodule "LinuxTerminalConfig/ohmyzsh_plugins/zsh-vi-mode"]
+	path = LinuxTerminalConfig/ohmyzsh_plugins/zsh-vi-mode
+	url = https://github.com/jeffreytse/zsh-vi-mode
