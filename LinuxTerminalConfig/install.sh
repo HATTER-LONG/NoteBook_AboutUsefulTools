@@ -10,21 +10,21 @@ ALIASESRC=~/.aliases
 FUNCTIONRC=~/.functions
 VIMRUNTIME=~/.vim_runtime
 PURE=~/.zsh/pure
-CURRENT=`pwd`
+CURRENT=$(pwd)
 time_now=$(date "+%Y%m%d")
 needback="false"
 
 echo "清理已有环境 .........."
 function clean_target() {
-    if [ -d $1 ];then
-        echo "清理已安装的 $1 ......"
-        if [ $needback == "true" ];then
-            echo "back $1 --> ${1}_back_$[time_now]"
-            mv -f $1 ${1}_back_$[time_now]
-        else
-            rm -rf ${1}
-        fi
-    fi
+	if [ -d $1 ]; then
+		echo "清理已安装的 $1 ......"
+		if [ $needback == "true" ]; then
+			echo "back $1 --> ${1}_back_$((time_now))"
+			mv -f $1 ${1}_back_$((time_now))
+		else
+			rm -rf ${1}
+		fi
+	fi
 }
 
 clean_target $VIMRUNTIME
@@ -51,11 +51,10 @@ ln -s $CURRENT/exports $EXPORTRC
 
 echo "安装 pure 主题 ..........."
 
-if [ ! -d ~/.zsh ];then
-    mkdir ~/.zsh
+if [ ! -d ~/.zsh ]; then
+	mkdir ~/.zsh
 fi
 ln -s $CURRENT/pure $PURE
-
 
 echo "安装 tmux config ............."
 ln -s -f ./tmuxConfig/.tmux.conf ~/.tmux.conf
@@ -64,7 +63,7 @@ cp $CURRENT/tmux.conf.local ~/.tmux.conf.local
 echo "安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全局搜索..........."
 #INSTALL="sudo pacman -Syyu"
 INSTALL="brew install"
-$INSTALL bat fzf ack nodejs npm tmux exa ripgrep zoxide git fd yarn sqlite
+$INSTALL bat fzf ack nodejs npm tmux exa ripgrep zoxide git fd yarn sqlite efm-langserver
 
 echo "suggest install font-fira-code-nerd-font!!!!"
 
