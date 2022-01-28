@@ -12,3 +12,4 @@ export FZF_DEFAULT_OPTS=" \
     --color=info:#f7c662,prompt:#6699cc,pointer:#a6bc69,marker:#a6bc69,spinner:#f7c662,header:#6699cc"
 
 export FZF_DEFAULT_COMMAND='fd --type f'
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
