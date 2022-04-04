@@ -94,7 +94,7 @@ ZSH_HIGHLIGHT_STYLES[globbing]='fg=#dffff5,bold'
 ZSH_HIGHLIGHT_STYLES[arg0]='fg=#dffff5,bold'
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#bac8ff,bold,underline"
-bindkey '^y' autosuggest-accept
+bindkey '^e' autosuggest-accept
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 source $ZSH/oh-my-zsh.sh
 fpath+=$HOME/.zsh/pure
