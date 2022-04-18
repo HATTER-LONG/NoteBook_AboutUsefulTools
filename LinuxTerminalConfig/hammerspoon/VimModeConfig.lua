@@ -24,7 +24,7 @@ vimmode:shouldShowAlertInNormalMode(true)
 vimmode:setAlertFont("Courier New")
 
 -- Enter normal mode by typing a key sequence
-vimmode:enterWithSequence("jk")
+--vimmode:enterWithSequence("jk")
 
 -- if you want to bind a single key to entering vim, remove the
 -- :enterWithSequence('jk') line above and uncomment the bindHotKeys line
@@ -33,4 +33,4 @@ vimmode:enterWithSequence("jk")
 -- To customize the hot key you want, see the mods and key parameters at:
 --   https://www.hammerspoon.org/docs/hs.hotkey.html#bind
 --
--- vm:bindHotKeys({ enter = { {'ctrl'}, ';' } })
+vimmode:bindHotKeys({ enter = { { "ctrl" }, ";" } })

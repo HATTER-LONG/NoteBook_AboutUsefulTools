@@ -71,19 +71,22 @@ hs.hotkey.bind({ "ctrl", "cmd" }, ".", function()
 			.. hs.window.focusedWindow():application():name()
 			.. "\n"
 			.. "IM source id:  "
-			.. hs.keycodes.currentSourceID()
+			.. hs.keycodes.currentSourceID(),
+		hs.mouse.getCurrentScreen()
 	)
 end)
 
-appwatcher = hs.application.watcher.new(updateFocusAppInputMethod)
-appwatcher:start()
+Appwatcher = hs.application.watcher.new(updateFocusAppInputMethod)
+Appwatcher:start()
 
-binder = hs.eventtap.new({ hs.eventtap.event.types.keyUp }, function(event)
-	print(event:getKeyCode())
-	print(hs.inspect.inspect(event:getFlags()))
+--[[binder = hs.eventtap.new({ hs.eventtap.event.types.keyUp }, function(event)
+	--print(event:getKeyCode())
+	--print(hs.inspect.inspect(event:getFlags()))
 
 	if event:getKeyCode() == 49 and event:getFlags().ctrl then
 		showInputMethod(true)
 	end
 end)
 binder:start()
+]]
+--

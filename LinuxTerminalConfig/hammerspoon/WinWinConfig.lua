@@ -1,4 +1,8 @@
 ---@diagnostic disable: undefined-global
+
+local focusColor = { ["hex"] = "#0078d4", ["alpha"] = 0.8 }
+local menuFocus = require("WindowFocus")
+local mouseJump = require("mouseJump")
 local function moveToScreen(direction)
 	local cwin = hs.window.focusedWindow()
 	if cwin then
@@ -20,15 +24,17 @@ local function moveToScreen(direction)
 		hs.alert.show("No focused window!")
 	end
 end
+local function quit()
+	spoon.ModalMgr:deactivate({ "resizeM" })
+	menuFocus:deleteMenubarIndicator("resizeM")
+	mouseJump:toCenterOfWindow()
+end
 
 if spoon.WinWin then
 	spoon.ModalMgr:new("resizeM")
 	local cmodal = spoon.ModalMgr.modal_list["resizeM"]
-	cmodal:bind("", "escape", "退出 ", function()
-		spoon.ModalMgr:deactivate({ "resizeM" })
-	end)
-	cmodal:bind("", "Q", "退出", function()
-		spoon.ModalMgr:deactivate({ "resizeM" })
+	cmodal:bind("alt", "r", "退出 ", function()
+		quit()
 	end)
 	cmodal:bind("", "tab", "键位提示", function()
 		spoon.ModalMgr:toggleCheatsheet()
@@ -219,6 +225,7 @@ if spoon.WinWin then
 	local hsresizeM_keys = { "alt", "R" }
 	if string.len(hsresizeM_keys[2]) > 0 then
 		spoon.ModalMgr.supervisor:bind(hsresizeM_keys[1], hsresizeM_keys[2], "进入窗口管理模式", function()
+			menuFocus:drawMenubarIndicator(focusColor, "resizeM")
 			spoon.ModalMgr:deactivateAll()
 			-- 显示状态指示器，方便查看所处模式
 			spoon.ModalMgr:activate({ "resizeM" }, "#B22222")
