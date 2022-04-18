@@ -119,6 +119,7 @@ local allwindows = nil
 function obj:startDrawBorder()
 	if allwindows ~= nil then
 		print("allwindows alread create")
+		return
 	end
 	obj:drawBorder()
 	allwindows = hs.window.filter.new(nil)
