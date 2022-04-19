@@ -21,11 +21,16 @@ end
 require("VimModeConfig")
 require("WinWinConfig")
 require("WindowsConfig")
-require("InputSwitchConfig")
 
 KeyUpDown = function(modifiers, key)
 	hs.eventtap.keyStroke(modifiers, key, 0)
 end
+
+--[ Auto Switch input metod ]---------------------------------------------------------
+local inputSwitch = require("InputSwitchConfig")
+Appwatcher = hs.application.watcher.new(inputSwitch.updateFocusAppInputMethod)
+Appwatcher:start()
+--[ End Auto Switch input metod ]---------------------------------------------------------
 
 --[ Spoon ]---------------------------------------------------------
 local tronOrange = { ["hex"] = "#DF740C" }
@@ -71,7 +76,6 @@ hs.hotkey.bind({ "cmd", "ctrl" }, "t", function()
 	hs.window.tiling.tileWindows(wins, rect)
 end)
 --[ END TILE WINDOWS ON CURRENT SCREEN ]-----------------------------------
-
 --[ Main ]---------------------------------------------------------
 local menuFocus = require("WindowFocus")
 local mouseJump = require("mouseJump")

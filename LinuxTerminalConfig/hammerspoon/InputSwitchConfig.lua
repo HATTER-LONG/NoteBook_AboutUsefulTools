@@ -1,4 +1,5 @@
 ---@diagnostic disable: undefined-global
+local obj = {}
 -- Key to launch application.
 local app2Ime = {
 	{ "/Applications/iTerm.app", "English" },
@@ -8,13 +9,15 @@ local app2Ime = {
 	{ "/Applications/Visual Studio Code.app", "English" },
 }
 
+obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.apple.inputmethod.SCIM.ITABC" }
+
 local function showInputMethod(reverse)
 	-- 用于保存当前输入法
 	local currentSourceID = hs.keycodes.currentSourceID()
 	local tag
 	hs.alert.closeSpecific(showUUID)
 
-	if currentSourceID == "com.apple.keylayout.ABC" then
+	if currentSourceID == obj.SourceID["English"] then
 		if reverse then
 			tag = " 中 "
 		else
@@ -30,21 +33,25 @@ local function showInputMethod(reverse)
 	hs.alert.show(tag, hs.mouse.getCurrentScreen(), 0.6)
 end
 
-local function Chinese()
-	hs.keycodes.currentSourceID("com.apple.inputmethod.SCIM.ITABC")
+function obj.GetCurrentMethodSourceID()
+	return hs.keycodes.currentSourceID()
+end
+
+function obj.Chinese()
+	hs.keycodes.currentSourceID(obj.SourceID["Chinese"])
 	showInputMethod()
 end
 
-local function English()
-	hs.keycodes.currentSourceID("com.apple.keylayout.ABC")
+function obj.English()
+	hs.keycodes.currentSourceID(obj.SourceID["English"])
 	showInputMethod()
 end
 
-local function updateFocusAppInputMethod(appName, eventType, appObject)
+function obj.updateFocusAppInputMethod(appName, eventType, appObject)
 	local ime = "English"
 	if eventType == hs.application.watcher.activated or eventType == hs.application.watcher.launched then
-		print("Now select app is " .. appObject:path())
-		for index, app in pairs(app2Ime) do
+		print("Now select app is " .. appName .. " path = " .. appObject:path())
+		for _, app in pairs(app2Ime) do
 			local appPath = app[1]
 			local expectedIme = app[2]
 
@@ -54,9 +61,9 @@ local function updateFocusAppInputMethod(appName, eventType, appObject)
 			end
 		end
 		if ime == "English" then
-			English()
+			obj:English()
 		else
-			Chinese()
+			obj:Chinese()
 		end
 	end
 end
@@ -76,8 +83,7 @@ hs.hotkey.bind({ "ctrl", "cmd" }, ".", function()
 	)
 end)
 
-Appwatcher = hs.application.watcher.new(updateFocusAppInputMethod)
-Appwatcher:start()
+return obj
 
 --[[binder = hs.eventtap.new({ hs.eventtap.event.types.keyUp }, function(event)
 	--print(event:getKeyCode())
