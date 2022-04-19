@@ -18,10 +18,14 @@ for _, v in pairs(HspoonList) do
 	hs.loadSpoon(v)
 end
 
---require("VimModeConfig")
+require("VimModeConfig")
 require("WinWinConfig")
 require("WindowsConfig")
 require("InputSwitchConfig")
+
+KeyUpDown = function(modifiers, key)
+	hs.eventtap.keyStroke(modifiers, key, 0)
+end
 
 --[ Spoon ]---------------------------------------------------------
 local tronOrange = { ["hex"] = "#DF740C" }
@@ -59,15 +63,16 @@ hs.hotkey.bind("alt", "k", function()
 end)
 --[ End Switcher ]---------------------------------------------------------
 
---[ TILE WINDOWS ON CURRENT SCREEN ]---------------------------------------------------------
+--[ TILE WINDOWS ON CURRENT SCREEN ]--------------------------------------
 hs.hotkey.bind({ "cmd", "ctrl" }, "t", function()
 	local wins = hs.window.filter.new():setCurrentSpace(true):getWindows()
 	local screen = hs.screen.mainScreen():currentMode()
 	local rect = hs.geometry(0, 0, screen["w"], screen["h"])
 	hs.window.tiling.tileWindows(wins, rect)
 end)
---[ END TILE WINDOWS ON CURRENT SCREEN ]---------------------------------------------------------
+--[ END TILE WINDOWS ON CURRENT SCREEN ]-----------------------------------
 
+--[ Main ]---------------------------------------------------------
 local menuFocus = require("WindowFocus")
 local mouseJump = require("mouseJump")
 
@@ -137,3 +142,12 @@ end
 
 -- Finally we initialize ModalMgr supervisor
 spoon.ModalMgr.supervisor:enter()
+
+--[ End Main ]---------------------------------------------------------
+local function reload_config()
+	hs.reload()
+end
+local mash = { "ctrl", "alt", "cmd" }
+hs.hotkey.bind(mash, "r", reload_config)
+
+hs.alert.show("Hammerspoon config loaded")
