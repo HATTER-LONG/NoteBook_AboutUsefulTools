@@ -42,3 +42,4 @@
        - 依赖：`npm i -g bash-language-server`
      - [coc-clang-format-style-options](https://www.npmjs.com/package/coc-clang-format-style-options)
 2. vim ack 插件依赖 ack 命令，需要安装。
+3. im-select 用于根据当前输入模式自动切换输入法，需要手动安装。

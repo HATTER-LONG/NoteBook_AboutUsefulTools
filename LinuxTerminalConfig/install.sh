@@ -65,7 +65,7 @@ echo "安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全�
 INSTALL="brew install"
 $INSTALL bat fzf ack nodejs npm tmux exa ripgrep zoxide git fd yarn sqlite efm-langserver
 
-echo "suggest install font-fira-code-nerd-font!!!!"
+echo "suggest install font-fira-code-nerd-font and im-select!!!!"
 
 echo "*********************"
 echo "* DONE !!! Enjoy :) *"

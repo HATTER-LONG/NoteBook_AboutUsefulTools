@@ -148,6 +148,25 @@ end
 spoon.ModalMgr.supervisor:enter()
 
 --[ End Main ]---------------------------------------------------------
+
+--[[local vscodeKeybinds = {
+	hs.hotkey.new("", "escape", function()
+		KeyUpDown("", "j")
+		KeyUpDown("", "k")
+	end),
+}
+
+local vscodeWatcher = hs.application.watcher.new(function(name, eventType, app)
+	if eventType ~= hs.application.watcher.activated then
+		return
+	end
+	local fnName = name == "Code" and "enable" or "disable"
+	for _, keybind in ipairs(vscodeKeybinds) do
+		keybind[fnName](keybind)
+	end
+end)
+vscodeWatcher:start()
+]]
 local function reload_config()
 	hs.reload()
 end
