@@ -150,7 +150,7 @@ cmodal:bind("alt", "s", "退出", function()
 	spoon.ModalMgr:deactivate({ "windowsFocus" })
 	obj:deleteMenubarIndicator("windowsFocus")
 	mouseJump:toCenterOfWindow()
-	obj:stopDrawBorder()
+	--obj:stopDrawBorder()
 end)
 
 cmodal:bind("", "j", "选择下方窗口", function()
@@ -172,7 +172,7 @@ if string.len(hsresizeM_keys[2]) > 0 then
 		obj:drawMenubarIndicator(borderColor, "windowsFocus")
 		spoon.ModalMgr:deactivateAll()
 		spoon.ModalMgr:activate({ "windowsFocus" }, "#3271ae")
-		obj:startDrawBorder()
+		--obj:startDrawBorder()
 	end)
 end
 

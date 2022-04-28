@@ -40,7 +40,7 @@ if spoon.WinWin then
 		spoon.ModalMgr:toggleCheatsheet()
 	end)
 	cmodal:bind(
-		"",
+		"ctrl",
 		"A",
 		"向左移动",
 		function()
@@ -52,7 +52,7 @@ if spoon.WinWin then
 		end
 	)
 	cmodal:bind(
-		"",
+		"ctrl",
 		"D",
 		"向右移动",
 		function()
@@ -64,7 +64,7 @@ if spoon.WinWin then
 		end
 	)
 	cmodal:bind(
-		"",
+		"ctrl",
 		"W",
 		"向上移动",
 		function()
@@ -76,7 +76,7 @@ if spoon.WinWin then
 		end
 	)
 	cmodal:bind(
-		"",
+		"ctrl",
 		"S",
 		"向下移动",
 		function()

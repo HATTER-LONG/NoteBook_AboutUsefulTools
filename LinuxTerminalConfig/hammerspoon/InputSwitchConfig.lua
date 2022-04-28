@@ -39,12 +39,12 @@ end
 
 function obj.Chinese()
 	hs.keycodes.currentSourceID(obj.SourceID["Chinese"])
-	showInputMethod()
+	--showInputMethod()
 end
 
 function obj.English()
 	hs.keycodes.currentSourceID(obj.SourceID["English"])
-	showInputMethod()
+	--showInputMethod()
 end
 
 function obj.updateFocusAppInputMethod(appName, eventType, appObject)

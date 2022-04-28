@@ -35,6 +35,7 @@ Appwatcher:start()
 --[ Spoon ]---------------------------------------------------------
 local tronOrange = { ["hex"] = "#DF740C" }
 spoon.MouseCircle.color = tronOrange
+
 --[ End Spoon ]---------------------------------------------------------
 
 --[ Vimouse ]---------------------------------------------------------
@@ -51,7 +52,7 @@ spoon.WindowGrid:start()
 local switcher = require("switcher")
 local focusColor = { ["hex"] = "#6FC3DF", ["alpha"] = 0.8 }
 --:setCurrentSpace(true)
-Switcher_space = switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter({}), {
+Switcher_space = switcher.new(hs.window.filter.new():setDefaultFilter({}), {
 	showTitles = true, -- disable text label over thumbnail
 	showThumbnails = true, -- show app preview in thumbnail
 	showSelectedThumbnail = false, -- disable large preview
@@ -60,10 +61,10 @@ Switcher_space = switcher.new(hs.window.filter.new():setCurrentSpace(true):setDe
 })
 
 -- Now using Witch instead, since Switch would miss newly created windows
-hs.hotkey.bind("alt", "j", function()
+hs.hotkey.bind({ "cmd", "ctrl" }, "j", function()
 	Switcher_space:next()
 end)
-hs.hotkey.bind("alt", "k", function()
+hs.hotkey.bind({ "cmd", "ctrl" }, "k", function()
 	Switcher_space:previous()
 end)
 --[ End Switcher ]---------------------------------------------------------
@@ -111,7 +112,7 @@ local function quit()
 	else
 		spoon.ModalMgr:deactivate({ mode })
 		menuFocus:deleteMenubarIndicator(mode)
-		menuFocus:stopDrawBorder()
+		--menuFocus:stopDrawBorder()
 		mouseJump:toCenterOfWindow()
 		mode = nil
 	end
@@ -140,7 +141,7 @@ if string.len(hsresizeM_keys[2]) > 0 then
 		spoon.ModalMgr:deactivateAll()
 		spoon.ModalMgr:activate({ "MainCut" }, "#3271ae")
 		mode = "MainCut"
-		menuFocus:startDrawBorder()
+		--menuFocus:startDrawBorder()
 	end)
 end
 
