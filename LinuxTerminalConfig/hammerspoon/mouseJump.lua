@@ -50,12 +50,14 @@ function mouseJump.toBottomLeft()
 end
 
 --[ Window Jumps ]------------------------------------------------------------
-function mouseJump.toCenterOfWindow()
+function mouseJump.toCenterOfWindow(neverShow)
 	local window = hs.window.focusedWindow()
 	local rect = window:frame()
 	local center = hs.geometry.rectMidPoint(rect)
 	hs.mouse.absolutePosition(center)
-	spoon.MouseCircle:show()
+	if neverShow == nil then
+		spoon.MouseCircle:show()
+	end
 end
 
 function mouseJump.toTopLeftOfWindow()
@@ -103,4 +105,3 @@ function mouseJump.toBottomLeftOfWindow()
 end
 
 return mouseJump
-

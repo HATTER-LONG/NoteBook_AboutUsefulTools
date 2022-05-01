@@ -77,79 +77,12 @@ hs.hotkey.bind({ "cmd", "ctrl" }, "t", function()
 	hs.window.tiling.tileWindows(wins, rect)
 end)
 --[ END TILE WINDOWS ON CURRENT SCREEN ]-----------------------------------
---[ Main ]---------------------------------------------------------
-local menuFocus = require("WindowFocus")
-local mouseJump = require("mouseJump")
 
-local mainCutFocusColor = { ["hex"] = "#3271ae", ["alpha"] = 0.8 }
-local windowResizeColor = { ["hex"] = "#6b798e", ["alpha"] = 0.8 }
-local windowSelectColor = { ["hex"] = "#45465e", ["alpha"] = 0.8 }
-local menucolor = {
-	["MainCut"] = mainCutFocusColor,
-	["resizeM"] = windowResizeColor,
-	["windowsFocus"] = windowSelectColor,
-}
-spoon.ModalMgr:new("MainCut")
-local cmodal = spoon.ModalMgr.modal_list["MainCut"]
-local mode = nil
-
-local function enterMode(switchMode)
-	if mode ~= "MainCut" then
-		spoon.ModalMgr:deactivate({ mode })
-	end
-	menuFocus:deleteMenubarIndicator(mode)
-	mode = switchMode
-	menuFocus:drawMenubarIndicator(menucolor[mode], mode)
-	spoon.ModalMgr:activate({ mode }, "#B22222")
-end
-
-local function quit()
-	if mode ~= "MainCut" then
-		menuFocus:deleteMenubarIndicator(mode)
-		spoon.ModalMgr:deactivate({ mode })
-		mode = "MainCut"
-		menuFocus:drawMenubarIndicator(menucolor[mode], mode)
-	else
-		spoon.ModalMgr:deactivate({ mode })
-		menuFocus:deleteMenubarIndicator(mode)
-		--menuFocus:stopDrawBorder()
-		mouseJump:toCenterOfWindow()
-		mode = nil
-	end
-end
-
-cmodal:bind("", "escape", "退出 ", function()
-	quit()
-end)
-
-cmodal:bind("", "q", "退出 ", function()
-	quit()
-end)
-
-cmodal:bind("", "r", "窗口管理模式", function()
-	enterMode("resizeM")
-end)
-
-cmodal:bind("", "s", "窗口选择模式", function()
-	enterMode("windowsFocus")
-end)
-
-local hsresizeM_keys = { "alt", "o" }
-if string.len(hsresizeM_keys[2]) > 0 then
-	spoon.ModalMgr.supervisor:bind(hsresizeM_keys[1], hsresizeM_keys[2], "进入管理模式", function()
-		menuFocus:drawMenubarIndicator(menucolor["MainCut"], "MainCut")
-		spoon.ModalMgr:deactivateAll()
-		spoon.ModalMgr:activate({ "MainCut" }, "#3271ae")
-		mode = "MainCut"
-		--menuFocus:startDrawBorder()
-	end)
-end
 
 -- Finally we initialize ModalMgr supervisor
 spoon.ModalMgr.supervisor:enter()
 
 --[ End Main ]---------------------------------------------------------
-
 --[[local vscodeKeybinds = {
 	hs.hotkey.new("", "escape", function()
 		KeyUpDown("", "j")
