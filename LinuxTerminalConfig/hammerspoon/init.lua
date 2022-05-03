@@ -78,7 +78,6 @@ hs.hotkey.bind({ "cmd", "ctrl" }, "t", function()
 end)
 --[ END TILE WINDOWS ON CURRENT SCREEN ]-----------------------------------
 
-
 -- Finally we initialize ModalMgr supervisor
 spoon.ModalMgr.supervisor:enter()
 

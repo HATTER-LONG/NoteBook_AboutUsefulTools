@@ -30,7 +30,7 @@ local function showInputMethod(reverse)
 			tag = " 中 "
 		end
 	end
-	hs.alert.show(tag, hs.mouse.getCurrentScreen(), 0.6)
+	hs.alert.show(tag, hs.mouse.getCurrentScreen(), 0.5)
 end
 
 function obj.GetCurrentMethodSourceID()
@@ -50,7 +50,10 @@ end
 function obj.updateFocusAppInputMethod(appName, eventType, appObject)
 	local ime = "English"
 	if eventType == hs.application.watcher.activated or eventType == hs.application.watcher.launched then
+		if hs.window.filter.isGuiApp(appname) == false then
 		print("Now select app is " .. appName .. " path = " .. appObject:path())
+			hs.window.filter.ignoreAlways(appname)
+		end
 		for _, app in pairs(app2Ime) do
 			local appPath = app[1]
 			local expectedIme = app[2]
@@ -79,20 +82,27 @@ hs.hotkey.bind({ "ctrl", "cmd" }, ".", function()
 			.. "\n"
 			.. "IM source id:  "
 			.. hs.keycodes.currentSourceID(),
-		hs.mouse.getCurrentScreen()
+		hs.mouse.getCurrentScreen(),
+		0.6
 	)
 end)
 
-return obj
-
---[[binder = hs.eventtap.new({ hs.eventtap.event.types.keyUp }, function(event)
-	--print(event:getKeyCode())
-	--print(hs.inspect.inspect(event:getFlags()))
-
-	if event:getKeyCode() == 49 and event:getFlags().ctrl then
-		showInputMethod(true)
+local needSwitchInput = false
+Binder = hs.eventtap.new({ hs.eventtap.event.types.keyDown, hs.eventtap.event.types.flagsChanged }, function(event)
+	if needSwitchInput == true and event:getKeyCode() == 56 and event:getFlags().shift == nil then
+		local currentSourceID = hs.keycodes.currentSourceID()
+		if currentSourceID == obj.SourceID["English"] then
+			obj:Chinese()
+		else
+			obj:English()
+		end
+		showInputMethod(false)
+	elseif event:getKeyCode() == 56 and event:getFlags().shift then
+		needSwitchInput = true
+	else
+		needSwitchInput = false
 	end
 end)
-binder:start()
-]]
---
+Binder:start()
+
+return obj
