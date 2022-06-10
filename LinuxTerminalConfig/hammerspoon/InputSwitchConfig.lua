@@ -9,7 +9,8 @@ local app2Ime = {
 	{ "/Applications/Visual Studio Code.app", "English" },
 }
 
-obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.apple.inputmethod.SCIM.ITABC" }
+obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.sogou.inputmethod.sogou.pinyin" }
+-- obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.apple.inputmethod.SCIM.ITABC" }
 
 local function showInputMethod(reverse)
 	-- 用于保存当前输入法
@@ -39,19 +40,19 @@ end
 
 function obj.Chinese()
 	hs.keycodes.currentSourceID(obj.SourceID["Chinese"])
-	--showInputMethod()
+	-- showInputMethod()
 end
 
 function obj.English()
 	hs.keycodes.currentSourceID(obj.SourceID["English"])
-	--showInputMethod()
+	-- showInputMethod()
 end
 
 function obj.updateFocusAppInputMethod(appName, eventType, appObject)
 	local ime = "English"
 	if eventType == hs.application.watcher.activated or eventType == hs.application.watcher.launched then
 		if hs.window.filter.isGuiApp(appname) == false then
-		print("Now select app is " .. appName .. " path = " .. appObject:path())
+			print("Now select app is " .. appName .. " path = " .. appObject:path())
 			hs.window.filter.ignoreAlways(appname)
 		end
 		for _, app in pairs(app2Ime) do
@@ -63,6 +64,7 @@ function obj.updateFocusAppInputMethod(appName, eventType, appObject)
 				break
 			end
 		end
+		print("Now select app is " .. appName .. " path = " .. appObject:path() .. "ime = " .. ime)
 		if ime == "English" then
 			obj:English()
 		else
@@ -89,6 +91,7 @@ end)
 
 local needSwitchInput = false
 Binder = hs.eventtap.new({ hs.eventtap.event.types.keyDown, hs.eventtap.event.types.flagsChanged }, function(event)
+	-- print("keycode " .. event:getKeyCode())
 	if needSwitchInput == true and event:getKeyCode() == 56 and event:getFlags().shift == nil then
 		local currentSourceID = hs.keycodes.currentSourceID()
 		if currentSourceID == obj.SourceID["English"] then
@@ -97,12 +100,13 @@ Binder = hs.eventtap.new({ hs.eventtap.event.types.keyDown, hs.eventtap.event.ty
 			obj:English()
 		end
 		showInputMethod(false)
+		needSwitchInput = false
 	elseif event:getKeyCode() == 56 and event:getFlags().shift then
 		needSwitchInput = true
 	else
 		needSwitchInput = false
 	end
 end)
-Binder:start()
+--Binder:start()
 
 return obj
