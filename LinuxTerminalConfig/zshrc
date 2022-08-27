@@ -84,7 +84,8 @@ zvm_before_init() {
 }
 
 # To differentiate aliases from other command types
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#dffff5,bold'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#dffff5,,bold'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#dc7974,bold'
 
 # To have paths colored instead of underlined
 ZSH_HIGHLIGHT_STYLES[path]='fg=cyan,bold'

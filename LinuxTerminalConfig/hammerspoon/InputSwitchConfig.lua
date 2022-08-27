@@ -6,11 +6,11 @@ local app2Ime = {
 	{ "/Applications/Microsoft Edge.app", "English" },
 	{ "/Applications/WeChat.app", "Chinese" },
 	{ "/Applications/System Preferences.app", "English" },
-	{ "/Applications/Visual Studio Code.app", "English" },
+	{ "/Applications/Visual Studio Code.app", "Chinese" },
 }
 
-obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.sogou.inputmethod.sogou.pinyin" }
--- obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.apple.inputmethod.SCIM.ITABC" }
+-- obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.sogou.inputmethod.sogou.pinyin" }
+obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.apple.inputmethod.SCIM.ITABC" }
 
 local function showInputMethod(reverse)
 	-- 用于保存当前输入法
