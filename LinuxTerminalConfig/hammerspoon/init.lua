@@ -8,7 +8,7 @@ if not HspoonList then
 	HspoonList = {
 		"ModalMgr",
 		"SpoonInstall",
---		"CircleClock",
+		--		"CircleClock",
 		"WinWin",
 		"WindowGrid",
 		"MouseCircle",
@@ -70,15 +70,6 @@ hs.hotkey.bind({ "cmd", "ctrl" }, "k", function()
 end)
 --[ End Switcher ]---------------------------------------------------------
 
---[ TILE WINDOWS ON CURRENT SCREEN ]--------------------------------------
-hs.hotkey.bind({ "cmd", "ctrl" }, "t", function()
-	local wins = hs.window.filter.new():setCurrentSpace(true):getWindows()
-	local screen = hs.screen.mainScreen():currentMode()
-	local rect = hs.geometry(0, 0, screen["w"], screen["h"])
-	hs.window.tiling.tileWindows(wins, rect)
-end)
---[ END TILE WINDOWS ON CURRENT SCREEN ]-----------------------------------
-
 -- Finally we initialize ModalMgr supervisor
 spoon.ModalMgr.supervisor:enter()
 
@@ -106,5 +97,4 @@ local function reload_config()
 end
 local mash = { "ctrl", "alt", "cmd" }
 hs.hotkey.bind(mash, "r", reload_config)
-
 hs.alert.show("Hammerspoon config loaded")

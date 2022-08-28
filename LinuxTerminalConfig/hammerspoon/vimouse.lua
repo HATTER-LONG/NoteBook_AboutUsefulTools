@@ -20,6 +20,7 @@
 -- Press <esc> or the configured toggle key to end Vi Mouse mode.
 
 local menuFocus = require("WindowFocus")
+local mousejump = require("mouseJump")
 local focusColor = { ["hex"] = "#ecd452", ["alpha"] = 0.8 }
 
 return function(tmod, tkey)
@@ -144,7 +145,7 @@ return function(tmod, tkey)
 				if repeating ~= 0 then
 					scrolling = scrolling + 1
 				else
-					scrolling = 1
+					scrolling = 10
 				end
 
 				local scroll_mul = 1 + math.log(scrolling)
@@ -184,6 +185,7 @@ return function(tmod, tkey)
 
 	hs.hotkey.bind(tmod, tkey, nil, function(event)
 		hs.alert("Vi Mouse On", hs.mouse.getCurrentScreen())
+		mousejump:toCenterOfWindow()
 		menuFocus:drawMenubarIndicator(focusColor, "vimouse")
 		orig_coords = hs.mouse.absolutePosition()
 		tap:start()

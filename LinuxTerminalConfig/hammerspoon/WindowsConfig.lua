@@ -1,4 +1,3 @@
-
 ---@diagnostic disable: undefined-global
 local function windowInScreen(screen, win) -- Check if a window belongs to a screen
 	return win:screen() == screen
@@ -11,7 +10,7 @@ local function focusNextScreen()
 	local center = hs.geometry.rectMidPoint(next_screen:fullFrame())
 
 	-- Find windows within this next screen, ordered from front to back.
-	windows = hs.fnutils.filter(hs.window.orderedWindows(), hs.fnutils.partial(windowInScreen, next_screen))
+	local windows = hs.fnutils.filter(hs.window.orderedWindows(), hs.fnutils.partial(windowInScreen, next_screen))
 
 	-- Move the mouse to the center of the other screen
 	hs.mouse.setAbsolutePosition(center)
