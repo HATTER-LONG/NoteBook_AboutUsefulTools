@@ -22,7 +22,42 @@
 local menuFocus = require("WindowFocus")
 local mousejump = require("mouseJump")
 local focusColor = { ["hex"] = "#ecd452", ["alpha"] = 0.8 }
+local geom = require("hs.geometry")
+local drawing = require("hs.drawing")
 
+local ui = {
+	textColor = { 1, 1, 1 },
+	textSize = 200,
+	cellStrokeColor = { 0, 0, 0 },
+	cellStrokeWidth = 5,
+	cellColor = { 0, 0, 0, 0.25 },
+	highlightColor = { 0.8, 0.8, 0, 0.5 },
+	highlightStrokeColor = { 0.8, 0.8, 0, 1 },
+	cyclingHighlightColor = { 0, 0.8, 0.8, 0.5 },
+	cyclingHighlightStrokeColor = { 0, 0.8, 0.8, 1 },
+	highlightStrokeWidth = 30,
+	selectedColor = { 0.2, 0.7, 0, 0.4 },
+	showExtraKeys = true,
+	fontName = "Lucida Grande",
+}
+local function initGridMode()
+	local window = hs.window.focusedWindow()
+	local windowframe = window:frame()
+	local width = windowframe.w
+	local height = windowframe.h
+	print("current windows h = ", height, ", w = ", width)
+	local elem =
+		geom.new({ x = windowframe.x, y = windowframe.y, x2 = windowframe.x + width, y2 = windowframe.y + height })
+	local rect = drawing.rectangle(elem)
+	rect:setFillColor({ ["hex"] = "#ecd452", ["alpha"] = 0.8 })
+
+	rect:setFill(true)
+	rect:setAlpha(0.4)
+	rect:setLevel(hs.drawing.windowLevels.overlay)
+	rect:setStroke(false)
+	rect:setBehavior(hs.drawing.windowBehaviors.canJoinAllSpaces)
+	elem.rect = rect
+end
 return function(tmod, tkey)
 	-- local overlay = nil
 	local log = hs.logger.new("vimouse", "debug")
@@ -47,7 +82,7 @@ return function(tmod, tkey)
 	local eventPropTypes = hs.eventtap.event.properties
 	local keycodes = hs.keycodes.map
 
-	function postEvent(et, coords, modkeys, clicks)
+	local function postEvent(et, coords, modkeys, clicks)
 		local e = hs.eventtap.event.newMouseEvent(et, coords, modkeys)
 		if clicks > 3 then
 			clicks = 3
@@ -183,11 +218,12 @@ return function(tmod, tkey)
 		return true
 	end)
 
-	hs.hotkey.bind(tmod, tkey, nil, function(event)
+	hs.hotkey.bind(tmod, tkey, nil, function(_)
 		hs.alert("Vi Mouse On", hs.mouse.getCurrentScreen())
 		mousejump:toCenterOfWindow()
 		menuFocus:drawMenubarIndicator(focusColor, "vimouse")
 		orig_coords = hs.mouse.absolutePosition()
+		initGridMode()
 		tap:start()
 	end)
 end

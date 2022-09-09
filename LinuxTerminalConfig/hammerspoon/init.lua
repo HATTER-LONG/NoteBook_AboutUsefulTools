@@ -42,6 +42,7 @@ spoon.MouseCircle.color = tronOrange
 --[ Vimouse ]---------------------------------------------------------
 local vimouse = require("vimouse")
 vimouse("alt", "m")
+--require("VimMouseMode")
 --[ End Vimouse ]---------------------------------------------------------
 
 --[ WindowGrid ]---------------------------------------------------------

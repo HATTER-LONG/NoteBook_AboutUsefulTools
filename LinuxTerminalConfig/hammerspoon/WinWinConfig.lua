@@ -41,6 +41,43 @@ end)
 hs.hotkey.bind({ "ctrl", "alt" }, "space", function()
 	moveToScreen("next")
 end)
+
+-- 使用 shkd 进行窗口快捷选择
+-- local mouseJump = require("mouseJump")
+-- spoon.ModalMgr:new("windowsFocus")
+-- local cmodal = spoon.ModalMgr.modal_list["windowsFocus"]
+-- local menuFocus = require("WindowFocus")
+--
+-- cmodal:bind("", "q", "退出", function()
+-- 	spoon.ModalMgr:deactivate({ "windowsFocus" })
+-- 	menuFocus:deleteMenubarIndicator("windowsFocus")
+-- 	mouseJump:toCenterOfWindow()
+-- 	menuFocus:stopDrawBorder()
+-- end)
+--
+-- cmodal:bind("", "j", "选择下方窗口", function()
+-- 	hs.window.filter.focusSouth()
+-- end)
+-- cmodal:bind("", "k", "选择上方窗口", function()
+-- 	hs.window.filter.focusNorth()
+-- end)
+-- cmodal:bind("", "h", "选择左侧窗口", function()
+-- 	hs.window.filter.focusWest()
+-- end)
+-- cmodal:bind("", "l", "选择右侧窗口", function()
+-- 	hs.window.filter.focusEast()
+-- end)
+--
+-- local hsresizeM_keys = { "alt", "s" }
+-- if string.len(hsresizeM_keys[2]) > 0 then
+-- 	spoon.ModalMgr.supervisor:bind(hsresizeM_keys[1], hsresizeM_keys[2], "进入窗口选择模式", function()
+-- 		menuFocus:drawMenubarIndicator(borderColor, "windowsFocus")
+-- 		spoon.ModalMgr:deactivateAll()
+-- 		spoon.ModalMgr:activate({ "windowsFocus" }, "#3271ae")
+-- 		menuFocus:startDrawBorder()
+-- 	end)
+-- end
+
 -- 由于 hammerspoon 对于常用的切换选中操作有时会卡顿，使用 yabai + skhd 替换常用快捷
 -- local function quit()
 -- 	spoon.ModalMgr:deactivate({ "resizeM" })
