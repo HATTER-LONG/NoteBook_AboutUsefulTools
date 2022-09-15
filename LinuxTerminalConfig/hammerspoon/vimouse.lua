@@ -27,10 +27,12 @@ local drawing = require("hs.drawing")
 
 local ui = {
 	textColor = { 1, 1, 1 },
-	textSize = 200,
+	textSize = 80,
 	cellStrokeColor = { 0, 0, 0 },
-	cellStrokeWidth = 5,
+	cellStrokeWidth = 3,
 	cellColor = { 0, 0, 0, 0.25 },
+	cellWidth = 200,
+	cellHeight = 200,
 	highlightColor = { 0.8, 0.8, 0, 0.5 },
 	highlightStrokeColor = { 0.8, 0.8, 0, 1 },
 	cyclingHighlightColor = { 0, 0.8, 0.8, 0.5 },
@@ -40,24 +42,124 @@ local ui = {
 	showExtraKeys = true,
 	fontName = "Lucida Grande",
 }
+
+local function getColor(t)
+	if t.red then
+		return t
+	else
+		return { red = t[1] or 0, green = t[2] or 0, blue = t[3] or 0, alpha = t[4] or 1 }
+	end
+end
+
+local function drawLine(elem)
+	local rect = drawing.rectangle(elem)
+	rect:setFill(true)
+	rect:setFillColor(getColor(ui.cellColor))
+	rect:setStroke(true)
+	rect:setStrokeColor(getColor(ui.cellStrokeColor))
+	rect:setStrokeWidth(ui.cellStrokeWidth)
+	rect:setLevel(hs.drawing.windowLevels.overlay)
+	rect:setBehavior(hs.drawing.windowBehaviors.canJoinAllSpaces)
+	return rect
+end
+
+local uiObj = { line = {}, text = {} }
+local easyMotion = false
+local lastCode = nil
+local deleteUI = function()
+	if not uiObj then
+		return
+	end
+	for a, s in pairs(uiObj) do
+		if a == "line" then
+			print("delete line obj")
+			for _, rectObj in pairs(s) do
+				rectObj:delete()
+			end
+		end
+		if a == "text" then
+			print("delete text obj")
+			for name, rectObj in pairs(s) do
+				print(name)
+				rectObj:delete()
+			end
+		end
+	end
+	uiObj = { line = {}, text = {} }
+end
+
+function Rnd_Number_And_Letter(num)
+	local key = "abcdefghijklmnopqrstuvwxyz"
+	local str = ""
+	local x = 1
+	for i = 1, num, 1 do
+		x = math.random(1, 26)
+		str = str .. string.sub(key, x, x)
+	end
+	return str
+end
+
+local function drawGridLine(windowframe)
+	local width = windowframe.w
+	local height = windowframe.h
+	local colSize = width / ui.cellWidth
+	print("draw col is ", colSize)
+
+	for col = 0, colSize, 1 do
+		local elem = geom.new({
+			x = windowframe.x + col * ui.cellWidth,
+			y = windowframe.y,
+			x2 = windowframe.x + col * ui.cellWidth + ui.cellStrokeWidth,
+			y2 = windowframe.y + height,
+		})
+		local rect = drawLine(elem)
+		rect:show()
+		table.insert(uiObj.line, rect)
+	end
+
+	local rowSize = height / ui.cellHeight
+	for row = 0, rowSize, 1 do
+		local elem = geom.new({
+			x = windowframe.x,
+			y = windowframe.y + row * ui.cellHeight,
+			x2 = windowframe.x + width,
+			y2 = windowframe.y + row * ui.cellHeight + ui.cellStrokeWidth,
+		})
+		local rect = drawLine(elem)
+		rect:show()
+		table.insert(uiObj.line, rect)
+
+		for col = 0, colSize, 1 do
+			if row < rowSize - 1 then
+				local elemText = geom.new({
+					x = windowframe.x + col * ui.cellWidth,
+					y = windowframe.y + row * ui.cellHeight,
+					x2 = windowframe.x + col * ui.cellWidth + ui.textSize + 100,
+					y2 = windowframe.y + row * ui.cellHeight + ui.textSize + 100,
+				})
+				local str = Rnd_Number_And_Letter(2)
+				while uiObj.text[str] ~= nil do
+					str = Rnd_Number_And_Letter(2)
+				end
+				local text = drawing.text(elemText, str)
+				text:setTextSize(ui.textSize)
+				text:setTextColor({ ["hex"] = "#bcf452" })
+				text:setTextFont(ui.fontName)
+				text:show()
+				print("x = ", text:frame().x, ", y = ", text:frame().y)
+				uiObj.text[str] = text
+			end
+		end
+	end
+	easyMotion = true
+end
+
 local function initGridMode()
 	local window = hs.window.focusedWindow()
 	local windowframe = window:frame()
-	local width = windowframe.w
-	local height = windowframe.h
-	print("current windows h = ", height, ", w = ", width)
-	local elem =
-		geom.new({ x = windowframe.x, y = windowframe.y, x2 = windowframe.x + width, y2 = windowframe.y + height })
-	local rect = drawing.rectangle(elem)
-	rect:setFillColor({ ["hex"] = "#ecd452", ["alpha"] = 0.8 })
-
-	rect:setFill(true)
-	rect:setAlpha(0.4)
-	rect:setLevel(hs.drawing.windowLevels.overlay)
-	rect:setStroke(false)
-	rect:setBehavior(hs.drawing.windowBehaviors.canJoinAllSpaces)
-	elem.rect = rect
+	drawGridLine(windowframe)
 end
+
 return function(tmod, tkey)
 	-- local overlay = nil
 	local log = hs.logger.new("vimouse", "debug")
@@ -101,8 +203,27 @@ return function(tmod, tkey)
 			-- Window cycling
 			return false
 		end
+		if easyMotion == true and event:getType() == eventTypes.keyDown then
+			print("input code = ", keycodes[code])
+			if lastCode == nil then
+				lastCode = keycodes[code]
+			else
+				local lable = lastCode .. keycodes[code]
+				print("lable = ", lable)
 
-		if code == keycodes.space then
+				if uiObj.text[lable] ~= nil then
+					local textRect = uiObj.text[lable]
+					local textFrame = textRect:frame()
+					coords.x = textFrame.x
+					coords.y = textFrame.y
+					print(coords.x, coords.y)
+					hs.mouse.absolutePosition(coords)
+					deleteUI()
+					easyMotion = false
+				end
+				lastCode = nil
+			end
+		elseif code == keycodes.space then
 			-- Mouse clicking
 			if repeating ~= 0 then
 				return true
@@ -175,6 +296,7 @@ return function(tmod, tkey)
 				menuFocus:deleteMenubarIndicator("vimouse")
 				tap:stop()
 				hs.mouse.absolutePosition(orig_coords)
+				deleteUI()
 				return true
 			elseif (code == keycodes["u"] or code == keycodes["d"]) and flags.ctrl then
 				if repeating ~= 0 then
