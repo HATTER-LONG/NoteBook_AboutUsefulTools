@@ -22,17 +22,16 @@
 local menuFocus = require("WindowFocus")
 local mousejump = require("mouseJump")
 local focusColor = { ["hex"] = "#ecd452", ["alpha"] = 0.8 }
-local geom = require("hs.geometry")
-local drawing = require("hs.drawing")
+local canvas = require("hs.canvas")
 
 local ui = {
-	textColor = { 1, 1, 1 },
-	textSize = 80,
+	textColor = { 1, 0, 0 },
+	textSize = 20,
 	cellStrokeColor = { 0, 0, 0 },
 	cellStrokeWidth = 3,
-	cellColor = { 0, 0, 0, 0.25 },
-	cellWidth = 200,
-	cellHeight = 200,
+	cellColor = { 0.1, 0.1, 0.5, 0.4 },
+	cellWidth = 80,
+	cellHeight = 80,
 	highlightColor = { 0.8, 0.8, 0, 0.5 },
 	highlightStrokeColor = { 0.8, 0.8, 0, 1 },
 	cyclingHighlightColor = { 0, 0.8, 0.8, 0.5 },
@@ -41,6 +40,7 @@ local ui = {
 	selectedColor = { 0.2, 0.7, 0, 0.4 },
 	showExtraKeys = true,
 	fontName = "Lucida Grande",
+	hideFadeOut = 0.3,
 }
 
 local function getColor(t)
@@ -51,113 +51,109 @@ local function getColor(t)
 	end
 end
 
-local function drawLine(elem)
-	local rect = drawing.rectangle(elem)
-	rect:setFill(true)
-	rect:setFillColor(getColor(ui.cellColor))
-	rect:setStroke(true)
-	rect:setStrokeColor(getColor(ui.cellStrokeColor))
-	rect:setStrokeWidth(ui.cellStrokeWidth)
-	rect:setLevel(hs.drawing.windowLevels.overlay)
-	rect:setBehavior(hs.drawing.windowBehaviors.canJoinAllSpaces)
-	return rect
-end
-
-local uiObj = { line = {}, text = {} }
+local uiObj = {}
 local easyMotion = false
 local lastCode = nil
+local canvasTable = nil
 local deleteUI = function()
-	if not uiObj then
-		return
+	if canvasTable ~= nil then
+		canvasTable:delete(ui.hideFadeOut)
+		canvasTable = nil
 	end
-	for a, s in pairs(uiObj) do
-		if a == "line" then
-			print("delete line obj")
-			for _, rectObj in pairs(s) do
-				rectObj:delete()
-			end
-		end
-		if a == "text" then
-			print("delete text obj")
-			for name, rectObj in pairs(s) do
-				print(name)
-				rectObj:delete()
-			end
-		end
-	end
-	uiObj = { line = {}, text = {} }
+	uiObj = {}
 end
 
-function Rnd_Number_And_Letter(num)
-	local key = "abcdefghijklmnopqrstuvwxyz"
-	local str = ""
-	local x = 1
-	for i = 1, num, 1 do
-		x = math.random(1, 26)
-		str = str .. string.sub(key, x, x)
-	end
-	return str
-end
-
-local function drawGridLine(windowframe)
-	local width = windowframe.w
-	local height = windowframe.h
-	local colSize = width / ui.cellWidth
-	print("draw col is ", colSize)
-
-	for col = 0, colSize, 1 do
-		local elem = geom.new({
-			x = windowframe.x + col * ui.cellWidth,
-			y = windowframe.y,
-			x2 = windowframe.x + col * ui.cellWidth + ui.cellStrokeWidth,
-			y2 = windowframe.y + height,
-		})
-		local rect = drawLine(elem)
-		rect:show()
-		table.insert(uiObj.line, rect)
-	end
-
-	local rowSize = height / ui.cellHeight
-	for row = 0, rowSize, 1 do
-		local elem = geom.new({
-			x = windowframe.x,
-			y = windowframe.y + row * ui.cellHeight,
-			x2 = windowframe.x + width,
-			y2 = windowframe.y + row * ui.cellHeight + ui.cellStrokeWidth,
-		})
-		local rect = drawLine(elem)
-		rect:show()
-		table.insert(uiObj.line, rect)
-
-		for col = 0, colSize, 1 do
-			if row < rowSize - 1 then
-				local elemText = geom.new({
-					x = windowframe.x + col * ui.cellWidth,
-					y = windowframe.y + row * ui.cellHeight,
-					x2 = windowframe.x + col * ui.cellWidth + ui.textSize + 100,
-					y2 = windowframe.y + row * ui.cellHeight + ui.textSize + 100,
-				})
-				local str = Rnd_Number_And_Letter(2)
-				while uiObj.text[str] ~= nil do
-					str = Rnd_Number_And_Letter(2)
-				end
-				local text = drawing.text(elemText, str)
-				text:setTextSize(ui.textSize)
-				text:setTextColor({ ["hex"] = "#bcf452" })
-				text:setTextFont(ui.fontName)
-				text:show()
-				print("x = ", text:frame().x, ", y = ", text:frame().y)
-				uiObj.text[str] = text
-			end
+local strArray = {}
+local function initStrArray()
+	local key = "abcdefghijklmnopqrstuvwxyz;,.[]'/"
+	local len = string.len(key)
+	for i = 1, len, 1 do
+		for k = 1, len, 1 do
+			strArray[(i - 1) * len + k] = string.sub(key, i, i) .. string.sub(key, k, k)
 		end
 	end
-	easyMotion = true
 end
+initStrArray()
 
 local function initGridMode()
 	local window = hs.window.focusedWindow()
 	local windowframe = window:frame()
-	drawGridLine(windowframe)
+	local canvasframe = nil
+	local canvasObjNum = 1
+	if canvasTable ~= nil then
+		canvasframe = canvasTable:frame()
+	end
+	if canvasframe ~= windowframe then
+		canvasTable = canvas.new({ x = windowframe.x, y = windowframe.y, h = windowframe.h, w = windowframe.w })
+		local width = windowframe.w
+		local height = windowframe.h
+		local colSize = math.floor(width / ui.cellWidth)
+		for col = 0, colSize, 1 do
+			canvasTable[canvasObjNum] = {
+				type = "segments",
+				closed = true,
+				strokeColor = getColor(ui.cellStrokeColor),
+				action = "stroke",
+				strokeWidth = ui.cellStrokeWidth,
+			}
+			local z = {}
+			table.insert(z, { x = col * ui.cellWidth, y = 0 })
+			table.insert(z, { x = col * ui.cellWidth, y = height })
+			canvasTable[col + 1].coordinates = z
+			canvasObjNum = canvasObjNum + 1
+		end
+		local rowSize = math.floor(height / ui.cellHeight)
+		for row = 0, rowSize, 1 do
+			canvasTable[canvasObjNum] = {
+				type = "segments",
+				closed = true,
+				strokeColor = getColor(ui.cellStrokeColor),
+				action = "stroke",
+				strokeWidth = ui.cellStrokeWidth,
+			}
+			local z = {}
+			table.insert(z, { x = 0, y = row * ui.cellHeight })
+			table.insert(z, { x = width, y = row * ui.cellHeight + ui.cellStrokeWidth })
+			canvasTable[canvasObjNum].coordinates = z
+			canvasObjNum = canvasObjNum + 1
+		end
+		for row = 0, rowSize, 1 do
+			for col = 0, colSize, 1 do
+				local str = strArray[row * colSize + col + 1]
+				local offset = 10
+				local textFrame = {
+					x = col * ui.cellWidth + math.floor(ui.cellWidth / 2) - offset,
+					y = row * ui.cellHeight + math.floor(ui.cellWidth / 2) - offset,
+					h = ui.textSize + 10,
+					w = ui.textSize * 2,
+				}
+				canvasTable[canvasObjNum] = {
+					frame = textFrame,
+					type = "text",
+					text = hs.styledtext.new(str, {
+						font = { name = ui.fontName, size = ui.textSize },
+						color = getColor(ui.textColor),
+						paragraphStyle = { alignment = "left" },
+					}),
+				}
+				uiObj[str] = { x = textFrame.x + offset + windowframe.x, y = textFrame.y + offset + windowframe.y }
+				print("str = ", str, " x = ", uiObj[str].x, ", y = ", uiObj[str].y)
+				canvasObjNum = canvasObjNum + 1
+			end
+		end
+		canvasTable[canvasObjNum] = {
+			action = "fill",
+			fillColor = getColor(ui.cellColor),
+			frame = windowframe,
+			type = "rectangle",
+		}
+	end
+	if canvasTable ~= nil then
+		canvasTable:show()
+		easyMotion = true
+	else
+		print("error canvas table is nil!!!")
+	end
 end
 
 return function(tmod, tkey)
@@ -203,27 +199,7 @@ return function(tmod, tkey)
 			-- Window cycling
 			return false
 		end
-		if easyMotion == true and event:getType() == eventTypes.keyDown then
-			print("input code = ", keycodes[code])
-			if lastCode == nil then
-				lastCode = keycodes[code]
-			else
-				local lable = lastCode .. keycodes[code]
-				print("lable = ", lable)
-
-				if uiObj.text[lable] ~= nil then
-					local textRect = uiObj.text[lable]
-					local textFrame = textRect:frame()
-					coords.x = textFrame.x
-					coords.y = textFrame.y
-					print(coords.x, coords.y)
-					hs.mouse.absolutePosition(coords)
-					deleteUI()
-					easyMotion = false
-				end
-				lastCode = nil
-			end
-		elseif code == keycodes.space then
+		if code == keycodes.space then
 			-- Mouse clicking
 			if repeating ~= 0 then
 				return true
@@ -285,7 +261,7 @@ return function(tmod, tkey)
 				mul = 1
 			end
 
-			if is_tapkey or code == keycodes["escape"] or code == keycodes["q"] then
+			if is_tapkey or code == keycodes["escape"] or (code == keycodes["q"] and easyMotion == false) then
 				if dragging then
 					postEvent(eventTypes.leftMouseUp, coords, flags, 0)
 				end
@@ -298,6 +274,25 @@ return function(tmod, tkey)
 				hs.mouse.absolutePosition(orig_coords)
 				deleteUI()
 				return true
+			elseif easyMotion == true then
+				print("input code = ", keycodes[code])
+				if lastCode == nil then
+					lastCode = keycodes[code]
+				else
+					local lable = lastCode .. keycodes[code]
+
+					if uiObj[lable] ~= nil then
+						local textRect = uiObj[lable]
+						coords.x = textRect.x
+						coords.y = textRect.y
+						hs.mouse.absolutePosition(coords)
+						canvasTable:hide()
+						easyMotion = false
+					end
+					lastCode = nil
+				end
+			elseif code == keycodes["e"] then
+				initGridMode()
 			elseif (code == keycodes["u"] or code == keycodes["d"]) and flags.ctrl then
 				if repeating ~= 0 then
 					scrolling = scrolling + 1
