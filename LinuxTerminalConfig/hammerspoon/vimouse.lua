@@ -29,16 +29,10 @@ local ui = {
 	textSize = 20,
 	cellStrokeColor = { 0, 0, 0 },
 	cellStrokeWidth = 3,
-	cellColor = { 0.1, 0.1, 0.5, 0.4 },
+	cellBackGroundColor = { 0.1, 0.1, 0.5, 0.4 },
 	cellWidth = 80,
 	cellHeight = 80,
-	highlightColor = { 0.8, 0.8, 0, 0.5 },
-	highlightStrokeColor = { 0.8, 0.8, 0, 1 },
-	cyclingHighlightColor = { 0, 0.8, 0.8, 0.5 },
-	cyclingHighlightStrokeColor = { 0, 0.8, 0.8, 1 },
-	highlightStrokeWidth = 30,
-	selectedColor = { 0.2, 0.7, 0, 0.4 },
-	showExtraKeys = true,
+	selectedColor = { 0.2, 0.2, 0.8 },
 	fontName = "Lucida Grande",
 	hideFadeOut = 0.3,
 }
@@ -61,6 +55,8 @@ local deleteUI = function()
 		canvasTable = nil
 	end
 	uiObj = {}
+	lastCode = nil
+	easyMotion = false
 end
 
 local strArray = {}
@@ -119,7 +115,7 @@ local function initGridMode()
 		end
 		for row = 0, rowSize, 1 do
 			for col = 0, colSize, 1 do
-				local str = strArray[row * colSize + col + 1]
+				local str = strArray[row * (colSize + 1) + col + 1]
 				local offset = 10
 				local textFrame = {
 					x = col * ui.cellWidth + math.floor(ui.cellWidth / 2) - offset,
@@ -127,23 +123,29 @@ local function initGridMode()
 					h = ui.textSize + 10,
 					w = ui.textSize * 2,
 				}
+				local textst = hs.styledtext.new(str, {
+					font = { name = ui.fontName, size = ui.textSize },
+					color = getColor(ui.textColor),
+					paragraphStyle = { alignment = "left" },
+				})
+				--textst = textst:setStyle({ color = { blue = 1 } }, 1, 1)
 				canvasTable[canvasObjNum] = {
 					frame = textFrame,
 					type = "text",
-					text = hs.styledtext.new(str, {
-						font = { name = ui.fontName, size = ui.textSize },
-						color = getColor(ui.textColor),
-						paragraphStyle = { alignment = "left" },
-					}),
+					text = textst,
 				}
-				uiObj[str] = { x = textFrame.x + offset + windowframe.x, y = textFrame.y + offset + windowframe.y }
-				print("str = ", str, " x = ", uiObj[str].x, ", y = ", uiObj[str].y)
+				uiObj[str] = {
+					x = textFrame.x + offset + windowframe.x,
+					y = textFrame.y + offset + windowframe.y,
+					objnum = canvasObjNum,
+				}
+				print("str = ", str, " x = ", uiObj[str].x, ", y = ", uiObj[str].y, ", frame x = ", textFrame.x)
 				canvasObjNum = canvasObjNum + 1
 			end
 		end
 		canvasTable[canvasObjNum] = {
 			action = "fill",
-			fillColor = getColor(ui.cellColor),
+			fillColor = getColor(ui.cellBackGroundColor),
 			frame = windowframe,
 			type = "rectangle",
 		}
@@ -155,9 +157,23 @@ local function initGridMode()
 		print("error canvas table is nil!!!")
 	end
 end
+local function updateTextColor(text, clear)
+	for str, obj in pairs(uiObj) do
+		if string.sub(str, 1, 1) == text then
+			print(obj.objnum)
+			local textobj = canvasTable[obj.objnum]
+			local color = nil
+			if clear == false then
+				color = getColor(ui.selectedColor)
+			else
+				color = getColor(ui.textColor)
+			end
+			textobj.text = textobj.text:setStyle({ color = color }, 1, 1)
+		end
+	end
+end
 
 return function(tmod, tkey)
-	-- local overlay = nil
 	local log = hs.logger.new("vimouse", "debug")
 	local tap = nil
 	local orig_coords = nil
@@ -278,6 +294,7 @@ return function(tmod, tkey)
 				print("input code = ", keycodes[code])
 				if lastCode == nil then
 					lastCode = keycodes[code]
+					updateTextColor(lastCode, false)
 				else
 					local lable = lastCode .. keycodes[code]
 
@@ -289,6 +306,7 @@ return function(tmod, tkey)
 						canvasTable:hide()
 						easyMotion = false
 					end
+					updateTextColor(lastCode, true)
 					lastCode = nil
 				end
 			elseif code == keycodes["e"] then

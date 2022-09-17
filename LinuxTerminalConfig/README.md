@@ -2,7 +2,7 @@
 
 快速部署 Linux 终端工具：
 
-- 更新日期：2022/9/9
+- 更新日期：2022/9/17
 
 ## Install
 
@@ -43,3 +43,16 @@
      - [coc-clang-format-style-options](https://www.npmjs.com/package/coc-clang-format-style-options)
 2. vim ack 插件依赖 ack 命令，需要安装。
 3. im-select 用于根据当前输入模式自动切换输入法，需要手动安装。
+
+## Macos 相关工具
+
+### HammerSpoon
+
+- 脚本配置：拷贝配置脚本 hammerspoon 即可：
+  - `cp hammerspoon ~/.hammerspoon`
+
+### yabai
+
+- 脚本配置：拷贝 yabai 目录下配置：
+  - `cp yabai/yabairc ~/.yabairc`
+  - `cp yabai/skhdrc ~/.skhdrc`
