@@ -116,6 +116,9 @@ local function initGridMode()
 		for row = 0, rowSize, 1 do
 			for col = 0, colSize, 1 do
 				local str = strArray[row * (colSize + 1) + col + 1]
+				if str == nil then
+					str = "N"
+				end
 				local offset = 10
 				local textFrame = {
 					x = col * ui.cellWidth + math.floor(ui.cellWidth / 2) - offset,
@@ -139,7 +142,7 @@ local function initGridMode()
 					y = textFrame.y + offset + windowframe.y,
 					objnum = canvasObjNum,
 				}
-				print("str = ", str, " x = ", uiObj[str].x, ", y = ", uiObj[str].y, ", frame x = ", textFrame.x)
+				--print("str = ", str, " x = ", uiObj[str].x, ", y = ", uiObj[str].y, ", frame x = ", textFrame.x)
 				canvasObjNum = canvasObjNum + 1
 			end
 		end
@@ -160,7 +163,6 @@ end
 local function updateTextColor(text, clear)
 	for str, obj in pairs(uiObj) do
 		if string.sub(str, 1, 1) == text then
-			print(obj.objnum)
 			local textobj = canvasTable[obj.objnum]
 			local color = nil
 			if clear == false then
