@@ -61,7 +61,7 @@ end
 
 local strArray = {}
 local function initStrArray()
-	local key = "abcdefghijklmnopqrstuvwxyz;,.[]'/"
+	local key = "abcdefghijklmnopqrstuvwxyz;,."
 	local len = string.len(key)
 	for i = 1, len, 1 do
 		for k = 1, len, 1 do

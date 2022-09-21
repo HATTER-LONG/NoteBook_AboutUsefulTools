@@ -74,6 +74,9 @@ end)
 -- Finally we initialize ModalMgr supervisor
 spoon.ModalMgr.supervisor:enter()
 
+Stackline = require("stackline")
+Stackline:init()
+
 --[ End Main ]---------------------------------------------------------
 --[[local vscodeKeybinds = {
 	hs.hotkey.new("", "escape", function()
