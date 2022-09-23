@@ -84,19 +84,34 @@ alt - l : yabai -m window --focus east || yabai -m display --focus next
 alt - r : yabai -m window --focus recent
 
 # swap managed window
-shift + alt - h : yabai -m window --swap west
-shift + alt - j : yabai -m window --swap south
-shift + alt - k : yabai -m window --swap north
-shift + alt - l : yabai -m window --swap east
+#shift + alt - h : yabai -m window --swap west
+#shift + alt - j : yabai -m window --swap south
+#shift + alt - k : yabai -m window --swap north
+#shift + alt - l : yabai -m window --swap east
 
 # 移动窗口位置, 通过 hammerspoon 实现
-#ctrl + alt - h : yabai -m window --warp west || (yabai -m window --display prev)
-#ctrl + alt - j : yabai -m window --warp south
-#ctrl + alt - k : yabai -m window --warp nort
-#ctrl + alt - l : yabai -m window --warp east || (yabai -m window --display next)
+# 复杂 jq 命令: index="$(yabai -m query --windows --window | jq 'to_entries| .[]| select(.key == "id")| .value')"
+ctrl + alt - h : yabai -m window --swap west || \
+                 (index="$(yabai -m query --windows --window | jq --args '.id')"&&\
+                    yabai -m window --display prev && yabai -m window --focus ${index})
+ctrl + alt - j : yabai -m window --swap south
+ctrl + alt - k : yabai -m window --swap north
+ctrl + alt - l : yabai -m window --swap east|| \
+                (index="$(yabai -m query --windows --window |jq --args '.id')"&&\
+                    yabai -m window --display next && yabai -m window --focus ${index})
 
-# balance size of windows
-ctrl + alt - z : yabai -m space --balance
+shift + alt - j : yabai -m window --focus stack.next || yabai -m window --focus stack.first
+shift + alt - k : yabai -m window --focus stack.prev || yabai -m window --focus stack.last
+shift + alt - h : yabai -m window --focus stack.first
+shift + alt - l : yabai -m window --focus stack.last
+shift + alt - a : yabai -m window --stack west
+shift + alt - s : yabai -m window --stack south
+shift + alt - d : yabai -m window --stack east
+shift + alt - w : yabai -m window --stack north
+shift + alt - p : yabai -m window --toggle float
+shift + alt - c : hs -c "stackline.config:toggle('appearance.showIcons')"
+
+shift + alt - z : yabai -m space --balance
 
 # 精准切换活动桌面
 alt - tab : yabai -m space --focus next
