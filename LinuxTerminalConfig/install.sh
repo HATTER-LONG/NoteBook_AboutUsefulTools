@@ -60,6 +60,8 @@ echo "安装 tmux config ............."
 ln -s -f ./tmuxConfig/.tmux.conf ~/.tmux.conf
 cp $CURRENT/tmux.conf.local ~/.tmux.conf.local
 
+echo "安装 kitty config ............"
+ln -s ./kitty/kitty.conf ~/.config/kitty
 echo "安装依赖 npm nodejs 用于支持 cocnvim, 安装 ack 命令支持全局搜索..........."
 #INSTALL="sudo pacman -Syyu"
 INSTALL="brew install"

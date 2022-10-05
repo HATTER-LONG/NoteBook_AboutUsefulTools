@@ -2,7 +2,7 @@
 
 快速部署 Linux 终端工具：
 
-- 更新日期：2022/9/23
+- 更新日期：2022/10/03
 
 ## Install
 
@@ -56,3 +56,7 @@
 - 脚本配置：拷贝 yabai 目录下配置：
   - `cp yabai/yabairc ~/.yabairc`
   - `cp yabai/skhdrc ~/.skhdrc`
+
+## Kitty
+
+- 增加 Kitty 配置脚本信息。

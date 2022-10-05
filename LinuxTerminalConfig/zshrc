@@ -79,8 +79,8 @@ zvm_before_init() {
   local ncur=$(zvm_cursor_style $ZVM_NORMAL_MODE_CURSOR)
   local icur=$(zvm_cursor_style $ZVM_INSERT_MODE_CURSOR)
 
-  ZVM_INSERT_MODE_CURSOR=$icur'\e\e]12;red\a'
-  ZVM_NORMAL_MODE_CURSOR=$ncur'\e\e]12;#008800\a'
+  #ZVM_INSERT_MODE_CURSOR=$icur'\e\e]12;red\a'
+  #ZVM_NORMAL_MODE_CURSOR=$ncur'\e\e]12;#008800\a'
 }
 
 # To differentiate aliases from other command types
@@ -94,7 +94,9 @@ ZSH_HIGHLIGHT_STYLES[path]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=#dffff5,bold'
 ZSH_HIGHLIGHT_STYLES[arg0]='fg=#dffff5,bold'
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#bac8ff,bold,underline"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#bac8ff,bold" #underline
+#zstyle -s ':prezto:module:autosuggestions:color' found \
+#  'ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE' || ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 bindkey '^e' autosuggest-accept
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 source $ZSH/oh-my-zsh.sh

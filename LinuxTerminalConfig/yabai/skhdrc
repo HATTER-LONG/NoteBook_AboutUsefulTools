@@ -1,119 +1,70 @@
-# ################################################################ #
-# THE FOLLOWING IS AN EXPLANATION OF THE GRAMMAR THAT SKHD PARSES. #
-# FOR SIMPLE EXAMPLE MAPPINGS LOOK FURTHER DOWN THIS FILE..        #
-# ################################################################ #
-
-# A list of all built-in modifier and literal keywords can
-# be found at https://github.com/koekeishiya/skhd/issues/1
-#
-# A hotkey is written according to the following rules:
-#
-#   hotkey       = <mode> '<' <action> | <action>
-#
-#   mode         = 'name of mode' | <mode> ',' <mode>
-#
-#   action       = <keysym> '[' <proc_map_lst> ']' | <keysym> '->' '[' <proc_map_lst> ']'
-#                  <keysym> ':' <command>          | <keysym> '->' ':' <command>
-#                  <keysym> ';' <mode>             | <keysym> '->' ';' <mode>
-#
-#   keysym       = <mod> '-' <key> | <key>
-#
-#   mod          = 'modifier keyword' | <mod> '+' <mod>
-#
-#   key          = <literal> | <keycode>
-#
-#   literal      = 'single letter or built-in keyword'
-# || yabai -m display --focus prev
-#   keycode      = 'apple keyboard kVK_<Key> values (0x3C)'
-#
-#   proc_map_lst = * <proc_map>
-#
-#   proc_map     = <string> ':' <command> | <string>     '~' |
-#                  '*'      ':' <command> | '*'          '~'
-#
-#   string       = '"' 'sequence of characters' '"'
-#
-#   command      = command is executed through '$SHELL -c' and
-#                  follows valid shell syntax. if the $SHELL environment
-#                  variable is not set, it will default to '/bin/bash'.
-#                  when bash is used, the ';' delimeter can be specified
-#                  to chain commands.
-#
-#                  to allow a command to extend into multiple lines,
-#                  prepend '\' at the end of the previous line.
-#
-#                  an EOL character signifies the end of the bind.
-#
-#   ->           = keypress is not consumed by skhd
-#
-#   *            = matches every application not specified in <proc_map_lst>
-#
-#   ~            = application is unbound and keypress is forwarded per usual, when specified in a <proc_map>
-#
-# A mode is declared according to the following rules:
-#
-#   mode_decl = '::' <name> '@' ':' <command> | '::' <name> ':' <command> |
-#               '::' <name> '@'               | '::' <name>
-#
-#   name      = desired name for this mode,
-#
-#   @         = capture keypresses regardless of being bound to an action
-#
-#   command   = command is executed through '$SHELL -c' and
-#               follows valid shell syntax. if the $SHELL environment
-#               variable is not set, it will default to '/bin/bash'.
-#               when bash is used, the ';' delimeter can be specified
-#               to chain commands.
-#
-#               to allow a command to extend into multiple lines,
-#               prepend '\' at the end of the previous line.
-#
-#               an EOL character signifies the end of the bind.
-
-# ############################################################### #
-# THE FOLLOWING SECTION CONTAIN SIMPLE MAPPINGS DEMONSTRATING HOW #
-# TO INTERACT WITH THE YABAI WM. THESE ARE SUPPOSED TO BE USED AS #
-# A REFERENCE ONLY, WHEN MAKING YOUR OWN CONFIGURATION..          #
-# ############################################################### #
-
-# focus window : 激活窗口快捷键  h: 左  j: 下  k: 右 l: 上 
+# focus window
+alt - x : yabai -m window --focus recent
 alt - h : yabai -m window --focus west || yabai -m display --focus prev
 alt - j : yabai -m window --focus south
 alt - k : yabai -m window --focus north
 alt - l : yabai -m window --focus east || yabai -m display --focus next
-alt - r : yabai -m window --focus recent
 
-# swap managed window
-#shift + alt - h : yabai -m window --swap west
-#shift + alt - j : yabai -m window --swap south
-#shift + alt - k : yabai -m window --swap north
-#shift + alt - l : yabai -m window --swap east
-
-# 移动窗口位置, 通过 hammerspoon 实现
-# 复杂 jq 命令: index="$(yabai -m query --windows --window | jq 'to_entries| .[]| select(.key == "id")| .value')"
-ctrl + alt - h : yabai -m window --swap west || \
-                 (index="$(yabai -m query --windows --window | jq --args '.id')"&&\
-                    yabai -m window --display prev && yabai -m window --focus ${index})
-ctrl + alt - j : yabai -m window --swap south
-ctrl + alt - k : yabai -m window --swap north
-ctrl + alt - l : yabai -m window --swap east|| \
-                (index="$(yabai -m query --windows --window |jq --args '.id')"&&\
-                    yabai -m window --display next && yabai -m window --focus ${index})
-
-shift + alt - j : yabai -m window --focus stack.next || yabai -m window --focus stack.first
-shift + alt - k : yabai -m window --focus stack.prev || yabai -m window --focus stack.last
-shift + alt - h : yabai -m window --focus stack.first
-shift + alt - l : yabai -m window --focus stack.last
-shift + alt - a : yabai -m window --stack west
-shift + alt - s : yabai -m window --stack south
-shift + alt - d : yabai -m window --stack east
-shift + alt - w : yabai -m window --stack north
+# stack ctrl
+alt - z : yabai -m window --focus stack.next || yabai -m window --focus stack.first
+alt - c : yabai -m window --focus stack.prev || yabai -m window --focus stack.last
+alt - a : yabai -m window --stack west
+alt - s : yabai -m window --stack south
+alt - d : yabai -m window --stack east
+alt - w : yabai -m window --stack north
 shift + alt - p : yabai -m window --toggle float
 shift + alt - c : hs -c "stackline.config:toggle('appearance.showIcons')"
 
+# swap window
+# 复杂 jq 命令: index="$(yabai -m query --windows --window | jq 'to_entries| .[]| select(.key == "id")| .value')"
+shift + alt - x : yabai -m window --swap recent|| \
+                 (index="$(yabai -m query --windows --window | jq --args '.id')"&&\
+                    yabai -m window --display recent && yabai -m window --focus ${index})
+
+shift + alt - h : yabai -m window --swap west|| \
+                 (index="$(yabai -m query --windows --window | jq --args '.id')"&&\
+                    yabai -m window --display prev && yabai -m window --focus ${index})
+shift + alt - j : yabai -m window --swap south
+shift + alt - k : yabai -m window --swap north
+shift + alt - l : yabai -m window --swap east|| \
+                (index="$(yabai -m query --windows --window |jq --args '.id')"&&\
+                    yabai -m window --display next && yabai -m window --focus ${index})
+
+# move window
+shift + cmd - h : yabai -m window --warp west|| \
+                 (index="$(yabai -m query --windows --window | jq --args '.id')"&&\
+                    yabai -m window --display prev && yabai -m window --focus ${index})
+shift + cmd - j : yabai -m window --warp south
+shift + cmd - k : yabai -m window --warp north
+shift + cmd - l : yabai -m window --warp east|| \
+                (index="$(yabai -m query --windows --window |jq --args '.id')"&&\
+                    yabai -m window --display next && yabai -m window --focus ${index})
+
+# balance size of windows
 shift + alt - z : yabai -m space --balance
 
-# 精准切换活动桌面
+# make floating window fill screen
+shift + alt - up     : yabai -m window --grid 1:1:0:0:1:1
+
+# make floating window fill left-half of screen
+shift + alt - left   : yabai -m window --grid 1:2:0:0:1:1
+
+# make floating window fill right-half of screen
+shift + alt - right  : yabai -m window --grid 1:2:1:0:1:1
+
+# increase window size
+shift + alt - a : yabai -m window --resize left:-20:0
+shift + alt - s : yabai -m window --resize bottom:0:20
+shift + alt - w : yabai -m window --resize top:0:-20
+shift + alt - d : yabai -m window --resize right:20:0
+
+# decrease window size
+shift + cmd - a : yabai -m window --resize left:20:0
+shift + cmd - s : yabai -m window --resize bottom:0:-20
+shift + cmd - w : yabai -m window --resize top:0:20
+shift + cmd - d : yabai -m window --resize right:-20:0
+
+# fast focus desktop
 alt - tab : yabai -m space --focus next
 alt + shift - tab : yabai -m space --focus prev
 alt - 1 : yabai -m space --focus 1
@@ -135,7 +86,6 @@ ctrl + alt - n : yabai -m space --create && \
 ctrl + alt - w : yabai -m space --destroy; yabai -m space --focus recent
 
 # send window to desktop and follow focus
-# yabai 4.0.4 存在一个问题 跨屏幕会导致窗口位置不对，需要重新定位
 ctrl + cmd - z : yabai -m window --space next; yabai -m space --focus next
 ctrl + alt - 1 : yabai -m window --space 1; yabai -m space --focus 1
 shift + alt - 1 : yabai -m window --space 1
@@ -158,28 +108,34 @@ shift + alt - 9 : yabai -m window --space  9
 ctrl + alt - 0 : yabai -m window --space  10; yabai -m space --focus 10
 shift + alt - 0 : yabai -m window --space  10
 
-#模式切换
-ctrl + cmd - b : yabai -m config layout bsp
-ctrl + cmd - l : yabai -m config layout float
-ctrl + cmd - s : yabai -m config layout stack
+# rotate tree
+alt - r : yabai -m space --rotate 90
 
-# set insertion point in focused container
-# ctrl + alt - h : yabai -m window --insert west
+# mirror tree y-axis
+alt - y : yabai -m space --mirror y-axis
 
-# toggle window zoom
-alt - d : yabai -m window --toggle zoom-parent
+# mirror tree x-axis
+alt - x : yabai -m space --mirror x-axis
+
+# toggle fullscreen
 alt - f : yabai -m window --toggle zoom-fullscreen
 
 # toggle window split type
 alt - e : yabai -m window --toggle split
 
+# toggle sticky (show on all spaces)
+ctrl + alt - a : yabai -m window --toggle sticky
+
+# toggle topmost (keep above other windows)
+alt - o : yabai -m window --toggle topmost
+
+# toggle picture-in-picture
+alt - p : yabai -m window --toggle border --toggle pip
+
 # float / unfloat window and center on screen
 alt - t : yabai -m window --toggle float;\
            yabai -m window --grid 4:4:1:1:2:2
-
-# toggle sticky(+float), topmost, picture-in-picture
-alt - p : yabai -m window --toggle sticky;\
-           yabai -m window --toggle topmost;\
-           yabai -m window --toggle pip
-
-
+#模式切换
+ctrl + cmd - b : yabai -m space --layout bsp
+ctrl + cmd - l : yabai -m space --layout float
+ctrl + cmd - s : yabai -m space --layout $(yabai -m query --spaces --space | jq -r 'if .type == "bsp" then "float" else "bsp" end')
