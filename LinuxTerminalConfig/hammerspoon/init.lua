@@ -76,8 +76,8 @@ spoon.ModalMgr.supervisor:enter()
 
 Stackline = require("stackline")
 Stackline:init()
---Superbar = require("superbar.superbar")
---Superbar:init()
+-- Superbar = require("superbar.superbar")
+-- Superbar:init()
 
 --[ End Main ]---------------------------------------------------------
 --[[local vscodeKeybinds = {

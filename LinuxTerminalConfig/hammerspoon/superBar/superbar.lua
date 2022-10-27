@@ -45,7 +45,8 @@ local function drawSuperBar()
 			end
 		end)
 		-- 设置菜单栏显示层级
-		obj.table[i]:level(hs.canvas.windowLevels.desktopIcon + 1000)
+		-- obj.table[i]:level(hs.canvas.windowLevels.desktopIcon + 1000)
+		obj.table[i]:level(hs.canvas.windowLevels.dragging)
 		-- 设置关联窗口的行为
 		obj.table[i]:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
 		obj.table[i]:show(0.3)
@@ -77,7 +78,7 @@ end
 local watcherFunction = function(event)
 	if event == hs.caffeinate.watcher.systemDidWake then
 		print("watcher() called. Event = %s", eventNames[event])
-		hs.timer.doAfter(10, obj.refresh)
+		hs.timer.doAfter(3, obj.refresh)
 	end -- systemDidWake
 end
 
