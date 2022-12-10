@@ -18,3 +18,5 @@ export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bott
 export PYENV_ROOT="$HOME/.pyenv"
 [ -z "$TMUX" ] && command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+export PIP_REQUIRE_VIRTUALENV=true

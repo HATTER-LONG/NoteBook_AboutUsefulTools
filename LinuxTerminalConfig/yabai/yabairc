@@ -11,34 +11,45 @@
 # see this wiki page for information:
 #  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)
 #
+
+# shellcheck disable=SC2016
+
 sudo yabai --load-sa
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
-
+yabai -m space 1 --label other
+yabai -m space 2 --label webs
+yabai -m space 3 --label work
+yabai -m space 4 --label media
+yabai -m config --space Media layout float
 #======= Rules =======================
-#系统偏好设置 浮动
-yabai -m rule --add app="^系统偏好设置$" manage=off
-yabai -m rule --add app="^提醒事项$" manage=off
-yabai -m rule --add app="^关于本机$" manage=off
-yabai -m rule --add app="^uTools$" manage=off
-yabai -m rule --add app="^(Calculator|System Preferences|Archive Utility)$" manage=off
-
+yabai -m rule --add app="^(Calculator|System Preferences|Archive Utility|Hammerspoon|Stream|uTools|关于本机|提醒事项|系统偏好设置)$" manage=off
+yabai -m rule --add app="^(哔哩哔哩)$" manage=on opacity=1.00 border=on space=Media
+yabai -m rule --add app="^(Microsoft Edge|Safari浏览器)$" manage=on opacity=1.00 border=on
+yabai -m rule --add app="^(Obsidian|iTerm2)$" space=Work
 #======= signal =====================
-
 yabai -m signal --add event=window_destroyed active=yes action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null"
 yabai -m signal --add event=window_minimized active=yes action="if \$(yabai -m query --windows --window \$YABAI_WINDOW_ID | jq -r '.\"is-floating\"'); then yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null; fi"
-
+yabai -m signal --add event=application_deactivated app="^(Obsidian)$" action="macism com.apple.keylayout.ABC"
+yabai -m signal --add event=application_activated app="^(Obsidian)$" action="macism com.apple.inputmethod.SCIM.ITABC"
+# set special app opacity
+# yabai -m signal --add event=application_activated app="^(Microsoft Edge)$" action='jq -n --argjson windows "$(yabai -m query --windows)" "\$windows[] | select(.app == \"Microsoft Edge\").id" | xargs -I{} yabai -m window {} --opacity 1.00'
+# yabai -m signal --add event=application_deactivated app="^(Microsoft Edge)$" action='jq -n --argjson windows "$(yabai -m query --windows)" "\$windows[] | select(.app == \"Microsoft Edge\").id" | xargs -I{} yabai -m window {} --opacity 0.00'
+# yabai -m signal --add event=window_focused action="sketchybar --trigger window_focus"
+# yabai -m signal --add event=window_created action="sketchybar --trigger windows_on_spaces"
+# yabai -m signal --add event=window_destroyed action="sketchybar --trigger windows_on_spaces"
+yabai -m signal --add event=window_created action='yabai -m query --windows --window $YABAI_WINDOW_ID | jq -er ".resizable == 0 and .floating == 0" && yabai -m window $YABAI_WINDOW_ID --toggle float'
 #======= config ======================
 # global settings
 yabai -m config \
-	external_bar all:37:0 \
+	external_bar all:40:0 \
 	mouse_follows_focus off \
-	focus_follows_mouse autoraise \
+	focus_follows_mouse off \
 	window_placement second_child \
 	window_topmost off \
 	window_shadow off \
 	window_animation_duration 0.25 \
 	window_opacity_duration 0.25 \
-	active_window_opacity 1.00 \
+	active_window_opacity 0.90 \
 	normal_window_opacity 0.70 \
 	window_opacity on \
 	insert_feedback_color 0xaad75f5f \
@@ -62,5 +73,7 @@ yabai -m config \
 	mouse_action1 move \
 	mouse_action2 resize \
 	mouse_drop_action swap
+
+osascript -e 'tell application id "tracesOf.Uebersicht" to refresh widget id "simple-bar-index-jsx"'
 
 echo "yabai configuration loaded.."

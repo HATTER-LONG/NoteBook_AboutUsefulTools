@@ -6,7 +6,8 @@ local app2Ime = {
 	{ "/Applications/Microsoft Edge.app", "English" },
 	{ "/Applications/WeChat.app", "Chinese" },
 	{ "/Applications/System Preferences.app", "English" },
-	{ "/Applications/Visual Studio Code.app", "Chinese" },
+	{ "/Applications/Visual Studio Code.app", "English" },
+	{ "/Applications/Obsidian.app", "Chinese" },
 }
 
 -- obj.SourceID = { ["English"] = "com.apple.keylayout.ABC", ["Chinese"] = "com.sogou.inputmethod.sogou.pinyin" }
@@ -40,12 +41,12 @@ end
 
 function obj.Chinese()
 	hs.keycodes.currentSourceID(obj.SourceID["Chinese"])
-	-- showInputMethod()
+	showInputMethod()
 end
 
 function obj.English()
 	hs.keycodes.currentSourceID(obj.SourceID["English"])
-	-- showInputMethod()
+	showInputMethod()
 end
 
 function obj.updateFocusAppInputMethod(appName, eventType, appObject)

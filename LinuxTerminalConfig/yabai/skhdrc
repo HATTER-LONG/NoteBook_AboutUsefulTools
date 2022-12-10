@@ -1,3 +1,6 @@
+# open terminal
+cmd - return : /Applications/Kitty.app/Contents/MacOS/kitty --single-instance -d ~ &> /dev/null
+
 # focus window
 alt - x : yabai -m window --focus recent
 alt - h : yabai -m window --focus west || yabai -m display --focus prev
@@ -44,7 +47,7 @@ shift + cmd - l : yabai -m window --warp east|| \
 shift + alt - z : yabai -m space --balance
 
 # make floating window fill screen
-shift + alt - up     : yabai -m window --grid 1:1:0:0:1:1
+shift + alt - up     : yabai -m window --grid 1:1:0:0:1:1 
 
 # make floating window fill left-half of screen
 shift + alt - left   : yabai -m window --grid 1:2:0:0:1:1
@@ -108,6 +111,12 @@ shift + alt - 9 : yabai -m window --space  9
 ctrl + alt - 0 : yabai -m window --space  10; yabai -m space --focus 10
 shift + alt - 0 : yabai -m window --space  10
 
+# set insertion point in focused container
+ctrl + alt - h : yabai -m window --insert west
+ctrl + alt - j : yabai -m window --insert south
+ctrl + alt - k : yabai -m window --insert north
+ctrl + alt - l : yabai -m window --insert east
+ctrl + alt - i : yabai -m window --insert stack
 # rotate tree
 alt - r : yabai -m space --rotate 90
 

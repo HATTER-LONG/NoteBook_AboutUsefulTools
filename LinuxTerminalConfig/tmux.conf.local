@@ -322,7 +322,7 @@ tmux_conf_theme_right_separator_sub='\uE0B3'
 #   ﲵ            ﮊ ﮏ ♥ ﰸ ﯅  
 tmux_conf_theme_status_left='  #S '
 #tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} | %b%d日#(curl wttr.in?format="%%c%%20%%t") | %R | #{username}#{root} | ﯅#{hostname} '
-tmux_conf_theme_status_right='ﲵ #(gitmux -cfg .gitmux.conf "#{pane_current_path}")|  %m/%d %R | ﯅ #{synchronized}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},}  | #{username}#{root} | ﯅#{hostname} '
+tmux_conf_theme_status_right='#(gitmux -cfg .gitmux.conf "#{pane_current_path}") |  #{username}#{root} | ﯅ #{hostname} '
 
 # status left style
 tmux_conf_theme_status_left_fg=$nord5 # '#e4e4e4,#e4e4e4,#e4e4e4'  # black, white , white
