@@ -23,6 +23,8 @@ set -g repeat-time 250
 set -g default-command /bin/zsh
 set -g @jump-key 's'
 set -g set-clipboard on
+
+bind x kill-pane
 # -- windows & pane creation ---------------------------------------------------
 
 # new window retains current path, possible values are:
